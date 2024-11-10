@@ -118,9 +118,7 @@ fn phone_fail_test() {
 #[test]
 fn contact_test() -> Result<()> {
     let str = "[contact]\nname = \"John\"\nsurname = \"Doe\"\nphones = [\"+380501234567\", \"+380501234568\"]\naddress = \"Some address\"\nbirthday = \"2000-01-01\"\n";
-    let contact = Grammar::parse(Rule::contact, str)?
-        .next()
-        .unwrap();
+    let contact = Grammar::parse(Rule::contact, str)?.next().unwrap();
     assert!(contact.as_str().contains("John"));
     Ok(())
 }
@@ -129,11 +127,7 @@ fn contact_test() -> Result<()> {
 #[test]
 fn file_test() -> Result<()> {
     let str = "[contact]\nname = \"John\"\nsurname = \"Doe\"\nphones = [\"+380501234567\", \"+380501234568\"]\naddress = \"Some address\"\nbirthday = \"2000-01-01\"\n\n";
-    let file = Grammar::parse(Rule::file, str)?
-        .next()
-        .unwrap();
+    let file = Grammar::parse(Rule::file, str)?.next().unwrap();
     println!("{:?}", file);
     Ok(())
 }
-
-

@@ -1,11 +1,41 @@
 use anyhow::Result;
 use contact_book_parser_protsap::parse_contacts;
 
-fn main() -> Result<()> {
-    let str = "[contact]\nname = \"John\"\nsurname = \"Doe\"\nphones = [\"+380501234567\", \"+380501234568\"]\naddress = \"Some address\"\nbirthday = \"2000-01-01\"\n\n";
-    let contacts = parse_contacts(str)?;
+use std::path::PathBuf;
 
-    println!("{:?}", contacts);
+use clap::{command, Parser};
+
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = None, arg_required_else_help = true)]
+struct Cli {
+    #[command(subcommand)]
+    cmd: ParseCommands,
+}
+
+#[derive(Parser, Debug)]
+enum ParseCommands {
+    #[command(name = "parse", about = "Parse contact book file", long_about = None, arg_required_else_help = true)]
+    Parse(ParseFile),
+}
+
+#[derive(Parser, Debug)]
+struct ParseFile {
+    #[clap(short, long)]
+    input: PathBuf,
+}
+
+fn main() -> Result<()> {
+    let opts = Cli::parse();
+
+    match opts.cmd {
+        ParseCommands::Parse(parse_file) => {
+            let contacts = parse_contacts(
+                &std::fs::read_to_string(parse_file.input).expect("Cannot read file"),
+            )
+            .expect("Cannot parse contacts");
+            println!("{:?}", contacts);
+        }
+    }
 
     Ok(())
 }

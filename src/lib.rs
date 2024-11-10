@@ -18,9 +18,9 @@ fn remove_quotes(s: &str) -> String {
     s.replace("\"", "")
 }
 
-pub fn parse_contacts(input: &str) -> Result<Vec<Contact>, pest::error::Error<Rule>> {
+pub fn parse_contacts(input: &str) -> Result<Vec<Contact>, Box<pest::error::Error<Rule>>> {
     let contacts = Grammar::parse(Rule::file, input)?;
-    let mut result : Vec<Contact> = Vec::new();
+    let mut result: Vec<Contact> = Vec::new();
 
     for contact in contacts {
         let mut name = String::new();
@@ -30,32 +30,29 @@ pub fn parse_contacts(input: &str) -> Result<Vec<Contact>, pest::error::Error<Ru
         let mut birthday = String::new();
 
         for record in contact.into_inner() {
-            match record.as_rule() {
-                Rule::contact => {
-                    for contact_record in record.into_inner() {
-                        match contact_record.as_rule() {
-                            Rule::name => {
-                                name = remove_quotes(contact_record.as_str());
-                            }
-                            Rule::surname => {
-                                surname = remove_quotes(contact_record.as_str());
-                            }
-                            Rule::phones => {
-                                for phone in contact_record.into_inner() {
-                                    phones.push(remove_quotes(phone.as_str()));
-                                }
-                            }
-                            Rule::address => {
-                                address = remove_quotes(contact_record.as_str());
-                            }
-                            Rule::date => {
-                                birthday = remove_quotes(contact_record.as_str());
-                            }
-                            _ => {}
+            if record.as_rule() == Rule::contact {
+                for contact_record in record.into_inner() {
+                    match contact_record.as_rule() {
+                        Rule::name => {
+                            name = remove_quotes(contact_record.as_str());
                         }
+                        Rule::surname => {
+                            surname = remove_quotes(contact_record.as_str());
+                        }
+                        Rule::phones => {
+                            for phone in contact_record.into_inner() {
+                                phones.push(remove_quotes(phone.as_str()));
+                            }
+                        }
+                        Rule::address => {
+                            address = remove_quotes(contact_record.as_str());
+                        }
+                        Rule::date => {
+                            birthday = remove_quotes(contact_record.as_str());
+                        }
+                        _ => {}
                     }
                 }
-                _ => {}
             }
         }
 

@@ -1,0 +1,6 @@
+[contact]
+name = "John"
+surname = "Doe"
+phones = ["+38(044)123-45-67", "+38(044)123-45-68"]
+address = "Some street, 123"
+birthday = "2000-01-01"

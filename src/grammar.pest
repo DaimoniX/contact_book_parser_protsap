@@ -33,4 +33,4 @@ contact = {
     "address" ~ equals ~ address ~ NEWLINE ~
     "birthday" ~ equals ~ date ~ NEWLINE
 }
-file = { SOI ~ (contact ~ NEWLINE)* ~ EOI }
+file = { SOI ~ (contact ~ NEWLINE{0,})* ~ EOI }

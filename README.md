@@ -9,7 +9,7 @@ Made for Rust course.
 [contact]
 name = "John"
 surname = "Doe"
-phones = ["+380501234567", "+380501234568", ...] // at least one phone
+phones = ["+380501234567", "+380501234568"]
 address = "Some address"
 birthday = "2000-01-01"
 
