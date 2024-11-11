@@ -4,6 +4,10 @@
 This is a simple parser for contact book, stored in toml format. It can parse a file with contacts and return a list of contacts.
 Made for Rust course.
 
+## Links
+- [Crate](https://crates.io/crates/toml_contact_book_parser)
+- [Documentation](https://docs.rs/toml_contact_book_parser)
+
 ## Table of contents
 - [Example of contact book](#example-of-contact-book)
 - [Usage example](#usage-example)
