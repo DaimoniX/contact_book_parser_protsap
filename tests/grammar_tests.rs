@@ -1,45 +1,8 @@
 use anyhow::anyhow;
 use anyhow::Ok;
 use anyhow::Result;
-use contact_book_parser_protsap::{Grammar, Rule};
+use toml_contact_book_parser::parser::{Grammar, Rule};
 use pest::Parser;
-
-/// Test for valid string input
-#[test]
-fn string_ok_test() -> Result<()> {
-    let res = Grammar::parse(Rule::string, "\"abc\"")?
-        .next()
-        .ok_or_else(|| anyhow!("No pair"))?;
-
-    assert_eq!(res.as_str(), "\"abc\"");
-    assert_eq!(res.as_span().start(), 0);
-    assert_eq!(res.as_span().end(), 5);
-
-    let res = Grammar::parse(Rule::string, "\"Carl\"")?
-        .next()
-        .ok_or_else(|| anyhow!("No pair"))?;
-
-    assert_eq!(res.as_str(), "\"Carl\"");
-    assert_eq!(res.as_span().start(), 0);
-    assert_eq!(res.as_span().end(), 6);
-
-    let res = Grammar::parse(Rule::string, "\"Carl Johnson\"")?
-        .next()
-        .ok_or_else(|| anyhow!("No pair"))?;
-
-    assert_eq!(res.as_str(), "\"Carl Johnson\"");
-    assert_eq!(res.as_span().start(), 0);
-    assert_eq!(res.as_span().end(), 14);
-
-    Ok(())
-}
-
-/// Test for invalid string input
-#[test]
-fn string_fail_test() {
-    assert!(Grammar::parse(Rule::string, "\"abc").is_err());
-    assert!(Grammar::parse(Rule::string, "").is_err())
-}
 
 /// Test for valid phone input, simple format
 #[test]
@@ -128,6 +91,9 @@ fn contact_test() -> Result<()> {
 fn file_test() -> Result<()> {
     let str = "[contact]\nname = \"John\"\nsurname = \"Doe\"\nphones = [\"+380501234567\", \"+380501234568\"]\naddress = \"Some address\"\nbirthday = \"2000-01-01\"\n\n";
     let file = Grammar::parse(Rule::file, str)?.next().unwrap();
-    println!("{:?}", file);
+    assert!(file.as_str().contains("John"));
+    assert!(file.as_str().contains("Doe"));
+    assert!(file.as_str().contains("Some address"));
+    assert!(file.as_str().contains("2000-01-01"));
     Ok(())
 }

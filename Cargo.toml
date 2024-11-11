@@ -1,15 +1,16 @@
 [package]
-name = "contact_book_parser_protsap"
+name = "toml_contact_book_parser"
 version = "0.1.0"
 edition = "2021"
 readme = "README.md"
 keywords = ["contact_book", "ukma", "kma"]
 description = "Parser for a contact book"
 license = "MIT"
-repository = "https://github.com/DaimoniX/contact_book_parser_protsap"
+repository = "https://github.com/DaimoniX/toml_contact_book_parser"
 
 [dependencies]
 anyhow = "1.0.92"
 clap = { version = "4.5.20", features = ["derive"] }
 pest = "2.7.14"
 pest_derive = "2.7.14"
+thiserror = "1.0.68"
