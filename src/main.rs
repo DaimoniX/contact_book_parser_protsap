@@ -4,13 +4,22 @@ use toml_contact_book_parser::cli::{Cli, ParseCommands};
 use toml_contact_book_parser::parser::parse_from_file;
 
 fn main() -> Result<()> {
-    let opts = Cli::parse();
+    let args = Cli::parse();
 
-    match opts.cmd {
-        ParseCommands::Parse(parse_file) => {
-            let contacts = parse_from_file(parse_file.input)?;
-            println!("{:?}", contacts);
+    if args.help {
+        println!("{}", Cli::help());
+        return Ok(());
+    }
+
+    if let Some(cmd) = args.cmd {
+        match cmd {
+            ParseCommands::Parse(file_path) => {
+                parse_from_file(file_path.input)?;
+            }
         }
+    }
+    else {
+        println!("{}", Cli::help());
     }
 
     Ok(())
