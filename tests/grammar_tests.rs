@@ -4,6 +4,18 @@ use anyhow::Result;
 use toml_contact_book_parser::parser::{Grammar, Rule};
 use pest::Parser;
 
+/*
+Completed tests:
+name - done
+surname - done
+address - done
+phone - done
+date - done
+phones - done
+contact - done
+file - done
+ */
+
 /// Write tests for name and surname rules
 #[test]
 fn name_surname_test() -> Result<()> {
@@ -24,6 +36,24 @@ fn name_surname_test() -> Result<()> {
     assert_eq!(res.as_span().end(), 5);
 
     Ok(())
+}
+
+/// Test for invalid name input
+#[test]
+fn name_fail_test() {
+    assert!(Grammar::parse(Rule::name, "\"John").is_err());
+    assert!(Grammar::parse(Rule::name, "").is_err());
+    assert!(Grammar::parse(Rule::name, "\"\"").is_err());
+    assert!(Grammar::parse(Rule::name, "\"John  \"").is_err());
+}
+
+/// Test for invalid surname input
+#[test]
+fn surname_fail_test() {
+    assert!(Grammar::parse(Rule::surname, "\"Doe").is_err());
+    assert!(Grammar::parse(Rule::surname, "").is_err());
+    assert!(Grammar::parse(Rule::surname, "\"\"").is_err());
+    assert!(Grammar::parse(Rule::surname, "\"Doe  \"").is_err());
 }
 
 /// Test for valid address input
@@ -149,6 +179,32 @@ fn phone_fail_test() {
     assert!(Grammar::parse(Rule::phone, "\"+38123)3456789\"").is_err());
     assert!(Grammar::parse(Rule::phone, "\"+38(1233456789\"").is_err());
     assert!(Grammar::parse(Rule::phone, "\"+38(123)34-56789\"").is_err());
+}
+
+/// Test for valid phones input
+#[test]
+fn phones_test() -> Result<()> {
+    let res = Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\"]")?
+        .next()
+        .ok_or_else(|| anyhow!("No pair"))?;
+
+    assert_eq!(res.as_str(), "[\"+380501234567\", \"+380501234568\"]");
+    assert_eq!(res.as_span().start(), 0);
+    assert_eq!(res.as_span().end(), 34);
+
+    Ok(())
+}
+
+/// Test for invalid phones input
+#[test]
+fn phones_fail_test() {
+    assert!(Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\"").is_err());
+    assert!(Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\" ").is_err());
+    assert!(Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\"").is_err());
+    assert!(Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\"\"").is_err());
+    assert!(Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\"\"").is_err());
+    assert!(Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\" ").is_err());
+    assert!(Grammar::parse(Rule::phones, "[\"+380501234567\", \"+380501234568\" ").is_err());
 }
 
 /// Test for contact input
