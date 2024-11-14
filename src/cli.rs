@@ -35,6 +35,8 @@ impl Cli {
         \n
         See 'toml_contact_book_parser <SUBCOMMAND> --help' for more information on a specific subcommand.\n
         \n
-        Example: toml_contact_book_parser parse -i contact_book.toml")
+        Example: toml_contact_book_parser parse -i contact_book.toml\n
+        \n
+        Made by: DaimoniX")
     }
 }
